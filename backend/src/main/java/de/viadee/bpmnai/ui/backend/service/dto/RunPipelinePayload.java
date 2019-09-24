@@ -3,6 +3,7 @@ package de.viadee.bpmnai.ui.backend.service.dto;
 public class RunPipelinePayload {
     private String dataLevel;
     private String outputFormat;
+    private String csvDelimiter;
     private String kafkaBroker;
 
     public String getDataLevel() {
@@ -19,6 +20,14 @@ public class RunPipelinePayload {
 
     public void setOutputFormat(String outputFormat) {
         this.outputFormat = outputFormat;
+    }
+
+    public String getCsvDelimiter() {
+        return csvDelimiter;
+    }
+
+    public void setCsvDelimiter(String csvDelimiter) {
+        this.csvDelimiter = csvDelimiter;
     }
 
     public String getKafkaBroker() {

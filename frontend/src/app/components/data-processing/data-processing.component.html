@@ -23,11 +23,12 @@
 </mat-accordion>
 <div>
   <br>
-<button color="accent" 
-    *ngIf="!_configurationService.processingDone"
-    (click)="triggerPreProcessing()"
-    [disabled]="_bpmnaiService.jobRunning"
-    mat-raised-button
-    class="block-display">Run preprocessing</button>
-<button mat-raised-button *ngIf="_configurationService.processingDone" color="primary" matStepperNext>Got to next step</button>
+  <p *ngIf="_configurationService.processingDone">Data processing is finished.</p>
+  <button color="accent" 
+      *ngIf="!_configurationService.processingDone"
+      (click)="triggerPreProcessing()"
+      [disabled]="_bpmnaiService.jobStatus.running"
+      mat-raised-button
+      class="block-display">Run preprocessing</button>
+  <button mat-raised-button *ngIf="_configurationService.processingDone" color="primary" matStepperNext>Go to next step</button>
 </div>

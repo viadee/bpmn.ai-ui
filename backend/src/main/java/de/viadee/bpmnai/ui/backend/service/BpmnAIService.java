@@ -152,7 +152,7 @@ public class BpmnAIService {
         Runnable worker = () -> {
 
             //run kafka processing
-            String args[] = {"-fs", ApplicationConfig.getInstance().getSparkRunnerConfig().getWorkingDirectory() + "/kafka_import", "-fd", ApplicationConfig.getInstance().getSparkRunnerConfig().getTargetFolder(), "-d", "|", "-sr", "false", "-dl", payload.getDataLevel(), "-of", payload.getOutputFormat(), "-wd", ApplicationConfig.getInstance().getSparkRunnerConfig().getWorkingDirectory()};
+            String args[] = {"-fs", ApplicationConfig.getInstance().getSparkRunnerConfig().getWorkingDirectory() + "/kafka_import", "-fd", ApplicationConfig.getInstance().getSparkRunnerConfig().getTargetFolder(), "-d", payload.getCsvDelimiter(), "-sr", "false", "-dl", payload.getDataLevel(), "-of", payload.getOutputFormat(), "-wd", ApplicationConfig.getInstance().getSparkRunnerConfig().getWorkingDirectory()};
 
             websocketService.broadcastMessage(true, true, "Running preprocessing pipeline...");
 

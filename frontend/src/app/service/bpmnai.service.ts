@@ -97,11 +97,12 @@ export class BpmnaiService {
       );
   }
 
-  runProcessing(outputFormat: string): Observable<any>  {
+  runProcessing(outputFormat: string, csvDelimiter: string): Observable<any>  {
     this.jobStatus.running = true;
     const payload = {
       'dataLevel': this._configurationService.getConfiguration().preprocessingConfiguration.dataLevel,
-      'outputFormat': outputFormat
+      'outputFormat': outputFormat,
+      'csvDelimiter': csvDelimiter
     };
     return this.httpClient.post(this.runProcessingUrl, payload)
       .pipe(

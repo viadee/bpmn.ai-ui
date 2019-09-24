@@ -14,6 +14,7 @@ export class DataProcessingComponent implements OnInit, OnDestroy {
   dataProcessingForm: FormGroup;
 
   outputFormat = 'parquet';
+  csvDelimiter = '|';
 
   private _subscriptions: Subscription[] = [];
 
@@ -30,7 +31,7 @@ export class DataProcessingComponent implements OnInit, OnDestroy {
   }
 
   triggerPreProcessing() {
-    this._subscriptions.push(this._bpmnaiService.runProcessing(this.outputFormat).subscribe());
+    this._subscriptions.push(this._bpmnaiService.runProcessing(this.outputFormat, this.csvDelimiter).subscribe());
   }
 
   ngOnDestroy(): void {
@@ -41,5 +42,9 @@ export class DataProcessingComponent implements OnInit, OnDestroy {
 
   outputFormatChanged(value: string) {
     this.outputFormat = value;
+  }
+
+  csvDelimiterChanged(value: string) {
+    this.csvDelimiter = value;
   }
 }

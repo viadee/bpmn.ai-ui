@@ -54,7 +54,7 @@
 
         <button *ngIf="shouldCreateConfigurationButtonBeVisible()"
                 color="primary"
-                [disabled]="_bpmnaiService.jobRunning"
+                [disabled]="_bpmnaiService.jobStatus.running"
                 (click)="triggerConfigurationGeneration()" mat-raised-button class="block-display" style="clear: left;">Create
             configuration
         </button>
@@ -72,6 +72,7 @@
                  formControlName="configLocation" type="text">
         </mat-form-field>
 
+        <p>Configuration has been created successfully.</p>
         <button mat-raised-button color="primary" matStepperNext>Go to next step</button>
     </ng-template>
 

@@ -14,6 +14,7 @@ export class ParameterConfigurationComponent implements OnInit, OnDestroy {
   outputDataSubscription$;
 
   @Output() outputFormatChanged = new EventEmitter<string>();
+  @Output() csvDelimiterChanged = new EventEmitter<string>();
 
   constructor(private _formBuilder: FormBuilder, public _configurationService: ConfigurationService) { }
 
@@ -23,10 +24,12 @@ export class ParameterConfigurationComponent implements OnInit, OnDestroy {
       sourceLocation: [{ value: '', disabled: true }, Validators.required],
       targetLocation: [{ value: '', disabled: true }, Validators.required],
       outputFormat: ['parquet', Validators.required],
+      csvDelimiter: ['|', Validators.required],
     });
 
     this.outputDataSubscription$ = this.dataProcessingForm.valueChanges.subscribe((values: any) => {
       this.outputFormatChanged.emit(values.outputFormat);
+      this.csvDelimiterChanged.emit(values.csvDelimiter);
     });
   }
 

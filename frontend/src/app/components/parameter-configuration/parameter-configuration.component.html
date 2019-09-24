@@ -4,24 +4,27 @@
     <mat-button-toggle value="parquet">Parquet</mat-button-toggle>
     <mat-button-toggle value="csv">CSV</mat-button-toggle>
   </mat-button-toggle-group>
+  <div *ngIf="dataProcessingForm.get('outputFormat').value === 'csv'">
+    <h4>CSV delimiter</h4>
+    <mat-select formControlName="csvDelimiter" placeholder="CSV delimiter"
+      (selectionChange)="csvDelimiterChanged($event)" style="width: 100px;"> 
+      <mat-option value="|">|</mat-option>
+      <mat-option value=";">;</mat-option>
+      <mat-option value=",">,</mat-option>
+    </mat-select>
+  </div>
 
   <h3>File locations</h3>
   <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Configuration file"
-           formControlName="configLocation"
-           value="{{ _configurationService.configLocation }}"
-           type="text">
+    <input matInput placeholder="Configuration file" formControlName="configLocation"
+      value="{{ _configurationService.configLocation }}" type="text">
   </mat-form-field>
   <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Source location"
-          value="{{ _configurationService.sourceLocation }}"
-          formControlName="sourceLocation"
-          type="text">
+    <input matInput placeholder="Source location" value="{{ _configurationService.sourceLocation }}"
+      formControlName="sourceLocation" type="text">
   </mat-form-field>
   <mat-form-field style="width: 100%;">
-    <input matInput placeholder="Target location"
-          value="{{ _configurationService.targetLocation }}"
-          formControlName="targetLocation"
-          type="text">
+    <input matInput placeholder="Target location" value="{{ _configurationService.targetLocation }}"
+      formControlName="targetLocation" type="text">
   </mat-form-field>
 </form>
