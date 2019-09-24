@@ -1,0 +1,65 @@
+<div>
+  <form class="searchForm" autocomplete="off">
+    <mat-card class="header-card">
+
+      <mat-card-content>
+        <mat-form-field>
+          <input matInput placeholder="Search process variables" value="" [(ngModel)]="userSearch"
+                 name="search" type="search">
+        </mat-form-field>
+        <mat-slide-toggle style="margin: 1rem 2rem;" name="showNotUsedVariables"
+                          [(ngModel)]="showNotUsedVariables">show disabled variables?</mat-slide-toggle>
+        <div *ngIf="_configurationService.getConfiguration() && _configurationService.getConfiguration().preprocessingConfiguration" style="margin: 0 1.5rem;">
+          {{ _configurationService.getConfiguration().preprocessingConfiguration.variableConfiguration.length }}
+          process variables found
+          <span *ngIf="userSearch.length > 0">
+                        (search resulted in
+            {{  (_configurationService.getConfiguration().preprocessingConfiguration.variableConfiguration | filterByInput:userSearch:showNotUsedVariables).length }}
+            matches)
+                    </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+
+  <div>
+    <ng-container *ngIf="_configurationService.getConfiguration() && _configurationService.getConfiguration().preprocessingConfiguration">
+      <mat-card [ngClass]="{'mat-card-inactive': !variable.useVariable, 'variable': true }"
+                *ngFor="let variable of _configurationService.getConfiguration().preprocessingConfiguration.variableConfiguration | filterByInput:userSearch:showNotUsedVariables">
+        <div class="mat-card-header-text">
+          <mat-card-title>
+            {{ variable.variableName }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ variable.comment }}
+          </mat-card-subtitle>
+        </div>
+        <mat-card-content>
+          <mat-slide-toggle name="{{ variable.variableName }}" [(ngModel)]="variable.useVariable"
+                            (change)="onUseVariableChange($event)">
+          </mat-slide-toggle>
+          <div ngClass="variable-info" *ngIf="variable.useVariable">
+            <mat-form-field ngClass="variable-type">
+              <mat-select [(value)]="variable.variableType" placeholder="Variable type"
+                          (selectionChange)="onVariableTypeChange($event)">
+                <mat-option>None</mat-option>
+                <mat-option value="string">String</mat-option>
+                <mat-option value="boolean">Boolean</mat-option>
+                <mat-option value="short">Short</mat-option>
+                <mat-option value="integer">Integer</mat-option>
+                <mat-option value="double">Double</mat-option>
+                <mat-option value="date">Date</mat-option>
+                <mat-option value="long">Long</mat-option>
+                <mat-option value="spin://application/json">Complex (Json)</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field style="width: 150px;" *ngIf="variable.variableType === 'date'"
+                            ngClass="variable-type">
+              <input matInput placeholder="Parse format" value="{{ variable.parseFormat }}">
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
+</div>

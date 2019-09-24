@@ -1,0 +1,19 @@
+<h4>Result preview</h4>
+<div class="scrolling-wrapper">
+  <table id="resultpreview">
+    <thead>
+    <tr>
+      <th *ngFor="let header of _bpmnaiService.getResultPreviewData().header">
+        {{ header }}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let entry of _bpmnaiService.getResultPreviewData().data">
+      <td *ngFor="let header of _bpmnaiService.getResultPreviewData().header">
+        {{ entry[header] }}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

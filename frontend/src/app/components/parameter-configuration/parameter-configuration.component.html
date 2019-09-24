@@ -1,0 +1,27 @@
+<form [formGroup]="dataProcessingForm">
+  <h4>Output format</h4>
+  <mat-button-toggle-group formControlName="outputFormat" aria-label="Output format">
+    <mat-button-toggle value="parquet">Parquet</mat-button-toggle>
+    <mat-button-toggle value="csv">CSV</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <h3>File locations</h3>
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Configuration file"
+           formControlName="configLocation"
+           value="{{ _configurationService.configLocation }}"
+           type="text">
+  </mat-form-field>
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Source location"
+          value="{{ _configurationService.sourceLocation }}"
+          formControlName="sourceLocation"
+          type="text">
+  </mat-form-field>
+  <mat-form-field style="width: 100%;">
+    <input matInput placeholder="Target location"
+          value="{{ _configurationService.targetLocation }}"
+          formControlName="targetLocation"
+          type="text">
+  </mat-form-field>
+</form>

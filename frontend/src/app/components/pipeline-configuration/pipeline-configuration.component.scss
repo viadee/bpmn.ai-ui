@@ -1,0 +1,84 @@
+@import '~@angular/material/theming';
+@import "../../../theme/viadee-app-theme.scss";
+
+.label {
+  width: 2em;
+  display: inline;
+}
+
+.value {
+  display: inline;
+}
+
+.mat-card {
+  margin-top: 1rem;
+}
+
+.mat-card.variable {
+  padding: 1rem 1rem 0 1rem;
+}
+
+.header-card {
+  background-color: mat-color($viadee-theme-accent, 50);
+  padding: 0 0 1rem 0
+}
+
+.mat-card-header-text {
+  margin: 0;
+}
+
+mat-card-title {
+  font-size: 18px;
+}
+
+mat-checkbox {
+  display: block;
+  margin: 1rem 0;
+}
+
+mat-card-content {
+  margin: 1rem 0;
+
+  div.variable-info {
+    display: inline;
+  }
+}
+
+mat-form-field.variable-type {
+  width: 100px;
+}
+
+.accent-bg-color {
+  background-color: mat-color($viadee-theme-accent, 50);
+}
+
+.warn-bg-color {
+  background-color: mat-color($viadee-theme-warn, 100);
+}
+
+.box {
+  padding:1rem;
+  margin: 1rem;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.pipeline-status-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

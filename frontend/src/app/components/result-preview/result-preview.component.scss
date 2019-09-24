@@ -1,0 +1,28 @@
+.scrolling-wrapper {
+  overflow-x: scroll;
+  overflow-y: scroll;
+  white-space: nowrap;
+  margin: 20px 0;
+  max-height: 450px;
+
+  .card {
+    display: inline-block;
+  }
+}
+
+th, td, p, input {
+  font-size: 14px;
+  font-family: Oswald, Verdana, sans-serif;
+}
+
+table, th, td {
+  border: solid 1px #000;
+  border-collapse: collapse;
+  padding: 5px;
+  text-align: center;
+}
+
+th {
+  font-weight:bold;
+  background-color: #efd49f;
+}

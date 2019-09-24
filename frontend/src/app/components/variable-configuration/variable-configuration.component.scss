@@ -1,0 +1,62 @@
+@import '~@angular/material/theming';
+@import "../../../theme/viadee-app-theme.scss";
+
+.label {
+  width: 2em;
+  display: inline;
+}
+
+.value {
+  display: inline;
+}
+
+.mat-card {
+  margin-top: 1rem;
+}
+
+.mat-card.variable {
+  padding: 1rem 1rem 0 1rem;
+}
+
+.header-card {
+  background-color: mat-color($viadee-theme-accent, 50);
+  padding: 0 0 1rem 0
+}
+
+.mat-card-header-text {
+  margin: 0;
+}
+
+mat-card-title {
+  font-size: 18px;
+}
+
+mat-checkbox {
+  display: block;
+  margin: 1rem 0;
+}
+
+mat-card-content {
+  margin: 1rem 0;
+
+  mat-form-field {
+    margin: 0 0 0 1.5rem;
+  }
+
+  div.variable-info {
+    display: inline;
+  }
+}
+
+mat-form-field.variable-type {
+  width: 130px;
+}
+
+.accent-bg-color {
+  background-color: mat-color($viadee-theme-accent, 50);
+}
+
+.box {
+  padding:1rem;
+  margin: 1rem;
+}

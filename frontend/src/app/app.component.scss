@@ -1,0 +1,33 @@
+@import '~@angular/material/theming';
+@import "../theme/viadee-app-theme.scss";
+
+:host {
+    max-width: 1100px;
+    display: block;
+    margin: auto;
+    margin-bottom: 50px;
+}
+
+.logo {
+    z-index: 10;
+    position:fixed;
+    bottom: 50px;
+    right: 10px;
+    background-color: #ffffff;
+
+    img {
+        width: 150px;
+    }
+}
+
+.page-title {
+    color: mat-color($viadee-theme-accent, 700);
+    text-align: center;
+    h1 {
+        font-size: 3rem;
+    }
+}
+
+.content {
+    margin-top: 50px;
+}

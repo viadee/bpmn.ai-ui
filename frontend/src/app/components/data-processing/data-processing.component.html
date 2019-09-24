@@ -1,0 +1,33 @@
+<p>In this step you can configure the detected process variables, amend and configure the default preprocessing pipeline and change the output format. Once you are done with that you can start the preprocessing.</p>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      Process variables
+    </mat-expansion-panel-header>
+    <bpmnai-variable-configuration></bpmnai-variable-configuration>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      Processing pipeline
+    </mat-expansion-panel-header>
+    <bpmnai-pipeline-configuration></bpmnai-pipeline-configuration>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      Configuration parameters
+    </mat-expansion-panel-header>
+    <bpmnai-parameter-configuration (outputFormatChanged)="outputFormatChanged($event)"></bpmnai-parameter-configuration>
+  </mat-expansion-panel>
+</mat-accordion>
+<div>
+  <br>
+<button color="accent" 
+    *ngIf="!_configurationService.processingDone"
+    (click)="triggerPreProcessing()"
+    [disabled]="_bpmnaiService.jobRunning"
+    mat-raised-button
+    class="block-display">Run preprocessing</button>
+<button mat-raised-button *ngIf="_configurationService.processingDone" color="primary" matStepperNext>Got to next step</button>
+</div>

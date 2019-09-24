@@ -1,0 +1,26 @@
+@import '../../../../node_modules/@angular/material/theming';
+@import "../../../theme/viadee-app-theme";
+
+.page-footer {
+  height: 40px;
+  z-index: 12;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: mat-color($viadee-theme-accent, 200);
+  transition: visibility 0s, opacity 0.5s linear;
+  visibility: visible;
+
+  > div {
+    position: relative;
+    top: 50%;
+    margin-left: 10px;
+    transform: translateY(-50%);
+  }
+
+  > div.right-align {
+    right: 2rem;
+    position: absolute;
+  }
+}

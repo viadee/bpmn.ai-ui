@@ -1,0 +1,71 @@
+<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+  <div ngClass="accent-bg-color box" fxFlex="50%">
+    <h2>Current pipeline</h2>
+    <div cdkDropList id="pipelineSteps" #currentList="cdkDropList" [cdkDropListConnectedTo]="[availableList]"
+         (cdkDropListDropped)="dropStep($event)">
+      <ng-container *ngIf="_configurationService.getConfiguration()">
+        <mat-card
+                *ngFor="let step of _configurationService.getConfiguration().preprocessingConfiguration.pipelineStepConfiguration.steps"
+                cdkDrag>
+          <div class="mat-card-header-text">
+            <mat-card-title *ngIf="step.definition">
+              {{ step.definition.name }}
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="step.definition">
+              {{ step.definition.description }}
+            </mat-card-subtitle>
+          </div>
+          <mat-card-content>
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ (step.definition) ? step.definition.parameters.length + ' ' : '' }}Parameters
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    {{ step.parameterCount }} set
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <ng-container *ngIf="step.definition && step.definition.parameters.length > 0">
+                  <ng-container *ngFor="let p of step.definition.parameters">
+                    <mat-form-field
+                            style="width: 90%;">
+                      <input matInput (change)="parameterChange($event)" id="{{ step.id +'::'+ p.name }}" placeholder="{{ p.name }}"
+                             value="{{ getValueForParameter(p.name, step.id) }}"
+                             type="{{ getInputTypeForDataType(p.dataType) }}">
+                    </mat-form-field>
+                    <i matTooltip="{{ p.description }}" class="far fa-question-circle"></i>
+                  </ng-container>
+                </ng-container>
+              </mat-expansion-panel>
+            </mat-accordion>
+
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  </div>
+  <div ngClass="box" fxFlex="50%">
+    <h2>Available pipeline steps</h2>
+    <div cdkDropList id="availableSteps" #availableList="cdkDropList" [cdkDropListConnectedTo]="[currentList]"
+         (cdkDropListDropped)="dropStep($event)">
+      <mat-card *ngFor="let step of _configurationService.getAvailableSteps()" cdkDrag [ngClass]="{'warn-bg-color': !isStepInPipeline(step.className) }">
+        <fa-icon *ngIf="isStepInPipeline(step.className)" [ngClass]="{'pipeline-status-icon': true}" [icon]="['fas', 'link']"></fa-icon>
+        <fa-icon *ngIf="!isStepInPipeline(step.className)" [ngClass]="{'pipeline-status-icon': true}" [icon]="['fas', 'unlink']"></fa-icon>
+        <div class="mat-card-header-text">
+          <mat-card-title>
+            {{ step.name }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ step.description }}
+          </mat-card-subtitle>
+        </div>
+        <mat-card-content *ngIf="step.parameters.length > 0">
+          <i>{{ step.parameters.length }}
+            parameter{{ step.parameters.length === 1 ? '' : 's' }}</i>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

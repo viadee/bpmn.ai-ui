@@ -1,0 +1,170 @@
+@import 'viadee-fonts.scss';
+
+$general-typography: mat-typography-config(
+  $font-family: 'Oswald, "Open Sans", "Helvetica Neue", sans-serif',
+  $body-2:        mat-typography-level(14px, 24px, 300)  
+);
+
+// Be sure that you only ever include this mixin once!
+@include mat-core($general-typography);
+
+// viadee-app-theme.scss
+$viadee-primary: (
+    50 : #f0f7f5,
+    100 : #d8ebe5,
+    200 : #bfded4,
+    300 : #a5d0c3,
+    400 : #91c6b6,
+    500 : #7ebca9,
+    600 : #76b6a2,
+    700 : #6bad98,
+    800 : #61a58f,
+    900 : #4e977e,
+    A100 : #f6fffc,
+    A200 : #c3ffeb,
+    A400 : #90ffd9,
+    A700 : #77ffd0,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$viadee-accent: (
+    50 : #fbf5e8,
+    100 : #f5e5c5,
+    200 : #efd49f,
+    300 : #e9c379,
+    400 : #e4b65c,
+    500 : #dfa93f,
+    600 : #dba239,
+    700 : #d79831,
+    800 : #d28f29,
+    900 : #ca7e1b,
+    A100 : #ffffff,
+    A200 : #ffe7cc,
+    A400 : #ffd099,
+    A700 : #ffc480,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$viadee-warn: (
+    50 : #f8e7ea,
+    100 : #eec2ca,
+    200 : #e29aa7,
+    300 : #d67183,
+    400 : #ce5269,
+    500 : #c5344e,
+    600 : #bf2f47,
+    700 : #b8273d,
+    800 : #b02135,
+    900 : #a31525,
+    A100 : #ffd6da,
+    A200 : #ffa3ac,
+    A400 : #ff707d,
+    A700 : #ff5766,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$viadee-theme-primary: mat-palette($viadee-primary);
+$viadee-theme-accent : mat-palette($viadee-accent, 600);
+$viadee-theme-warn   : mat-palette($viadee-warn);
+$viadee-theme: mat-light-theme(
+    $viadee-theme-primary,
+    $viadee-theme-accent,
+    $viadee-theme-warn
+);
+
+// Export theme colors
+$primary: mat-color($viadee-theme-primary);
+$accent: mat-color($viadee-theme-accent);
+$warn: mat-color($viadee-theme-warn);
+
+h3 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+button {
+    margin-top: 1rem;
+}
+
+.block-display {
+    display: block;
+}
+
+.mat-card {
+    background-color: mat-color($viadee-theme-primary, 100);
+}
+
+.mat-card-inactive {
+    background-color: #d4d4d4;
+}
+
+.click-area {
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.green {
+    color: mat-color($viadee-theme-primary, 700);
+}
+
+.orange {
+    color: mat-color($viadee-theme-accent, 700);
+}
+
+.red {
+    color: mat-color($viadee-theme-warn, 700);
+}
+
+.white {
+    color: white;
+}
+
+button {
+    font-family: 'Oswald, "Open Sans", "Helvetica Neue", sans-serif';
+    font-size: 14px;
+}

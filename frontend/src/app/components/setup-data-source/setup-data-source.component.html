@@ -1,0 +1,79 @@
+<form [formGroup]="setupForm">
+    <ng-container *ngIf="_configurationService.isConfigurationEmpty(); else configPresent">
+
+        <p>A configuration file is not existing yet. You can go ahead
+            and create it now from your data.</p>
+
+        <h4>Datasource</h4>
+        <p>Currently only Kafka input is supported via the UI.</p>
+        <mat-button-toggle-group [(value)]="datasource" name="datasource" aria-label="Datasource">
+            <mat-button-toggle value="kafka">Kafka</mat-button-toggle>
+            <mat-button-toggle value="csv" disabled>CSV file</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <h4>Data processing level</h4>
+        <p>Choose between the result data being aggregated on process or activitiy instance level.</p>
+        <mat-button-toggle-group [(value)]="processingLevel" name="processingLevel" aria-label="Processing data level">
+            <mat-button-toggle value="process">Process</mat-button-toggle>
+            <mat-button-toggle value="activity">Activity</mat-button-toggle>
+        </mat-button-toggle-group>
+        <p></p>
+        <ng-container *ngIf="datasource === 'kafka'" style="margin: auto;">
+            <mat-form-field id="kafkaBrokerInput" appearance="standard">
+                <mat-label>Kafka broker</mat-label>
+                <input matInput class="form-control" placeholder="Kafka broker" value="{{ _configurationService.kafkaBroker }}"
+                       formControlName="kafkaBroker" type="text" name="kafkaBroker"/>
+                <mat-spinner matSuffix 
+                    diameter="24"
+                    *ngIf="isKafkaBrokerTestRunning()"></mat-spinner>
+                <mat-icon matSuffix
+                        *ngIf="!isKafkaBrokerTestRunning()"
+                          [ngClass]="determineKafkaIconColor()"
+                          title="{{ _configurationService.kafkaBrokerTestResultMessage }}">settings_input_hdmi</mat-icon>
+
+            </mat-form-field>
+            <button color="accent" (click)="testKafkaConfiguration()" mat-raised-button
+                    [disabled]="!setupForm.get('kafkaBroker').valid">Test
+            </button>
+
+            <div *ngIf="f.kafkaBroker.errors && (f.kafkaBroker.dirty || f.kafkaBroker.touched)" class="red" style="clear: left;">
+                <p *ngIf="f.kafkaBroker.errors.required">Please enter the Kafka broker url as
+                    servername/ip:port</p>
+                <p *ngIf="f.kafkaBroker.errors.pattern">The kafka broker url needs to be of format
+                    servername/ip:port</p>
+            </div>
+
+            <div *ngIf="_configurationService.kafkaBrokerTestResult < 2"
+                 [ngClass]="{ 'white' : _configurationService.kafkaBrokerTestResult == 0, 'red' : _configurationService.kafkaBrokerTestResult < 0, 'orange' : _configurationService.kafkaBrokerTestResult == 1, 'green' : _configurationService.kafkaBrokerTestResult == 2 }"
+                 style="clear: left;">
+                <p>{{ _configurationService.kafkaBrokerTestResultMessage }}</p>
+            </div>
+
+        </ng-container>
+        <br>
+
+        <button *ngIf="shouldCreateConfigurationButtonBeVisible()"
+                color="primary"
+                [disabled]="_bpmnaiService.jobRunning"
+                (click)="triggerConfigurationGeneration()" mat-raised-button class="block-display" style="clear: left;">Create
+            configuration
+        </button>
+    </ng-container>
+    <ng-template #configPresent>
+        <p>A configuration file has been found.</p>
+        <h4>Data processing level</h4>
+        <mat-button-toggle-group disabled [(value)]="processingLevel" name="processingLevel" aria-label="Processing data level">
+            <mat-button-toggle value="process">Process</mat-button-toggle>
+            <mat-button-toggle value="activity">Activity</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field style="width: 100%; margin-top: 30px;">
+            <input matInput placeholder="Configuration file" value="{{ _configurationService.configLocation }}"
+                 formControlName="configLocation" type="text">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" matStepperNext>Go to next step</button>
+    </ng-template>
+
+
+</form>

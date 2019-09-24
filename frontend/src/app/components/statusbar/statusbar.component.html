@@ -1,0 +1,12 @@
+<div class="page-footer" [@showHideAnim]=currentState>
+    <!-- <mat-progress-bar *ngIf="jobRunning" mode="indeterminate"></mat-progress-bar> -->
+    <div>
+        <fa-icon *ngIf="jobRunning" title="cancel job" (click)="cancelJob()" class="click-area red"
+                 [icon]="['fas', 'stop-circle']"></fa-icon>
+        <span>{{ message }}</span>
+    </div>
+    <div class="right-align">
+        <fa-icon [ngClass]="{ 'red' : !wsConnectionStatus, 'green' : wsConnectionStatus }"
+                 [icon]="['fas', 'circle']" class="click-area"></fa-icon>
+    </div>
+</div>

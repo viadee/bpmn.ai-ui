@@ -1,0 +1,17 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <ng-template matStepperIcon="edit">
+    <mat-icon>done</mat-icon>
+  </ng-template>
+  <mat-step [completed]="step1Ready">
+    <ng-template matStepLabel>Setup data source</ng-template>
+    <bpmnai-setup-data-source></bpmnai-setup-data-source>
+  </mat-step>
+  <mat-step [completed]="step2Ready">
+    <ng-template matStepLabel>Configure and run data processing</ng-template>
+    <bpmnai-data-processing></bpmnai-data-processing>
+  </mat-step>
+  <mat-step completed="false">
+    <ng-template matStepLabel> Preview result and start Machine Learning</ng-template>
+    <bpmnai-result-preview></bpmnai-result-preview>
+  </mat-step>
+</mat-horizontal-stepper>
