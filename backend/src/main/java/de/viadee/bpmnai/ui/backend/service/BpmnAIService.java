@@ -6,7 +6,7 @@ import de.viadee.bpmnai.core.exceptions.FaultyConfigurationException;
 import de.viadee.bpmnai.core.listener.SparkRunnerListener;
 import de.viadee.bpmnai.core.runner.impl.KafkaImportRunner;
 import de.viadee.bpmnai.core.runner.impl.KafkaProcessingRunner;
-import de.viadee.bpmnai.core.util.SparkImporterVariables;
+import de.viadee.bpmnai.core.util.BpmnaiVariables;
 import de.viadee.bpmnai.ui.backend.configuration.ApplicationConfig;
 import de.viadee.bpmnai.ui.backend.service.dto.ConfigFileLocations;
 import de.viadee.bpmnai.ui.backend.service.dto.KafkaTestResponse;
@@ -212,12 +212,12 @@ public class BpmnAIService {
 
     public ResultPreviewResponse previewResult() throws ParseException {
         SparkSession sparkSession = SparkSession.builder().getOrCreate();
-        boolean tableExists = Arrays.asList(sparkSession.sqlContext().tableNames()).contains(SparkImporterVariables.RESULT_PREVIEW_TEMP_TABLE);
+        boolean tableExists = Arrays.asList(sparkSession.sqlContext().tableNames()).contains(BpmnaiVariables.RESULT_PREVIEW_TEMP_TABLE);
 
         ResultPreviewResponse resultPreviewResponse = new ResultPreviewResponse();
 
         if(tableExists) {
-            Dataset<Row> dataset = sparkSession.sql("select * from " + SparkImporterVariables.RESULT_PREVIEW_TEMP_TABLE);
+            Dataset<Row> dataset = sparkSession.sql("select * from " + BpmnaiVariables.RESULT_PREVIEW_TEMP_TABLE);
             List<String> results = dataset.toJSON().collectAsList();
 
             List<Object> data = new ArrayList<>();
@@ -232,7 +232,7 @@ public class BpmnAIService {
             resultPreviewResponse.setHeader(dataset.columns());
 
             //get activity information
-            dataset = sparkSession.sql("select activity_name_, MAX(activity_id_) as activity_id_ from " + SparkImporterVariables.RESULT_PREVIEW_TEMP_TABLE + " group by activity_name_");
+            dataset = sparkSession.sql("select activity_name_, MAX(activity_id_) as activity_id_ from " + BpmnaiVariables.RESULT_PREVIEW_TEMP_TABLE + " group by activity_name_");
             results = dataset.toJSON().collectAsList();
 
             List<Object> activities = new ArrayList<>();

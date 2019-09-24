@@ -4,7 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import de.viadee.bpmnai.core.runner.SparkRunner;
 import de.viadee.bpmnai.core.runner.config.SparkRunnerConfig;
-import de.viadee.bpmnai.core.util.logging.SparkImporterLogger;
+import de.viadee.bpmnai.core.util.logging.BpmnaiLogger;
 import de.viadee.bpmnai.ui.backend.service.ServiceRoutes;
 import de.viadee.bpmnai.ui.backend.configuration.ApplicationConfig;
 import de.viadee.bpmnai.ui.backend.configuration.CustomJacksonObjectMapper;
@@ -55,7 +55,7 @@ public class Application {
         config.setSourceFolder(ARGS.getFileSource());
         config.setTargetFolder(ARGS.getFileDestination());
         config.setRunningMode(SparkRunner.RUNNING_MODE.KAFKA_PROCESSING);
-        SparkImporterLogger.getInstance().setLogDirectory(ARGS.getLogDirectory());
+        BpmnaiLogger.getInstance().setLogDirectory(ARGS.getLogDirectory());
 
         config.setGenerateResultPreview(true);
         config.setCloseSparkSessionAfterRun(false);
@@ -63,7 +63,7 @@ public class Application {
         //start local Spark instance
         SparkSession.builder().master("local[*]").getOrCreate();
 
-        SparkImporterLogger.getInstance().writeInfo("UI Backend server started");
+        BpmnaiLogger.getInstance().writeInfo("UI Backend server started");
         LOG.info("UI Backend server started");
     }
 
