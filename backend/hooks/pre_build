@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "perform angular build"
+
+docker run -v $(pwd)/../frontend:/src -w /src node:12.2.0 mvn clean package
+
 echo "perform maven build"
 
-docker run -v $(pwd)/..:/src -w /src maven:3.6-jdk-8-alpine mvn -P standaloneJar clean package -DskipTests
+docker run -v $(pwd):/src -w /src maven:3.6-jdk-8-alpine mvn -P standaloneJar clean package
