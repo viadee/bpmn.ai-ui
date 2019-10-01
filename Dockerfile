@@ -9,7 +9,7 @@ COPY / /home
 WORKDIR /home/frontend
 RUN mvn clean package
 WORKDIR /home/backend
-RUN mvn -P standaloneJar clean package
+RUN mvn clean package
 
 
 FROM ubuntu:18.04
