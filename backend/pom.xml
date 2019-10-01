@@ -32,8 +32,9 @@
         <dependency>
             <groupId>de.viadee</groupId>
             <artifactId>bpmnai-core</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1</version>
         </dependency>
+
 
     </dependencies>
 
@@ -131,14 +132,6 @@
             </build>
         </profile>
     </profiles>
-    
-    <repositories>
-        <repository>
-            <id>viadeeNexus</id>
-            <name>Internal Snapshots</name>
-            <url>http://nexus.intern.viadee.de/repository/maven-snapshots/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
