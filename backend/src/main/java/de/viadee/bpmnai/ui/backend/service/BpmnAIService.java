@@ -73,6 +73,8 @@ public class BpmnAIService {
             executor.awaitTermination(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             websocketService.broadcastMessage(true, true, "tasks interrupted");
+            // Restore interrupted state...
+            Thread.currentThread().interrupt();
         } finally {
             if (executor != null) {
                 if (!executor.isTerminated()) {
@@ -189,14 +191,15 @@ public class BpmnAIService {
 
         KafkaTestResponse response = new KafkaTestResponse();
 
+        KafkaConsumer<String, String> consumer = new KafkaConsumer(props);
         try {
-            KafkaConsumer<String, String> consumer = new KafkaConsumer(props);
             topics = consumer.listTopics(Duration.ofMillis(3000));
-            consumer.close();
         } catch (Exception e) {
             response.setMessage("Error connecting to Kafka broker");
             response.setResultCode(500);
             return response;
+        } finally {
+            consumer.close();
         }
 
         if (topics.containsKey("processInstance") && topics.containsKey("variableUpdate")) {
