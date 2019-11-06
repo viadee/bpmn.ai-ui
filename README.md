@@ -25,11 +25,11 @@ You can run bpmn.ai-ui by building a standalone jar and run it on your machine.
 
 #### Create a standalone jar
 
-In the project root folder run the follwoing conmmand to build a standalone runnable jar:
+In the project root folder run the following command to build a standalone runnable jar:
 
     mvn clean package -PstandaloneJar
 
-After a succesful build the standalone jar can be found under backend/target/bpmnai-ui-\<version\>-jar-with-dependencies.jar
+After a succesful build the standalone jar can be found in the folder backend/target/bpmnai-ui-\<version\>-jar-with-dependencies.jar
 
 #### Run the jar
 
@@ -43,6 +43,6 @@ The UI will be available on port [7000](http://localhost:7000).
 
 #### Add your own pipeline step
 
-If you want to add you own pipeline steps while using the UI you simply change the bpmn.ai-core dependency of bpmn.ai-ui to your project containing your pipeline steps. Just make sure that your project is using bpmn.ai-core as a dependency with at least version 1.2.1.
+If you want to add you own pipeline steps while using the UI you simply change the bpmn.ai-core dependency of the bpmn.ai-ui to your maven project based on bpmn.ai-core containing your pipeline steps. Just make sure that your project is using bpmn.ai-core as a dependency with at least version 1.2.1.
 
 For details on building your own pipeline step see the [bpmn.ai wiki](https://github.com/viadee/bpmn.ai/wiki/12_Tutorial-2-%E2%80%90-Create-a-custom-Preprocessing-step-for-bpmn.ai).
