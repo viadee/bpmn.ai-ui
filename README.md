@@ -10,14 +10,14 @@ The easiest way to run bpmn.ai-ui is by using the provided [Docker image](https:
 In order to run bpmn.ai-ui you can use the following command:
 
     docker run -it --rm \
-        --network ui-demo_default \
+        --network bpmnai-ui-demo \
         -v <local_folder_for_bpmn.ai_files>:/data \
         -p 7000:7000 \
         viadee/bpmn.ai-ui:latest
 
 This run the latest version of bpmn.ai-ui and maps your local folder as /data inside the container (has to be /data) and makes the UI available on port [7000](http://localhost:7000) on the docker host. It is configured to use all cpu cores available to the docker container.
 
-By using "--network ui-demo_default" the docker container is joined into the docker network ui-demo_default. This should match the docker network of your kafka server if it is also running in a docker container.
+By using "--network bpmnai-ui-demo" the docker container is joined into the docker network bpmnai-ui-demo. This should match the docker network of your kafka server if it is also running in a docker container.
 
 ### Using maven
 
