@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="Definitions_1ik2wty" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.4">
+  <bpmn:process id="Demoprozess" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Meldung eines Schadens empfangen">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="marke" label="Marke" type="string" />
+          <camunda:formField id="reparatur_art" label="Reparatur Art" type="enum" defaultValue="reparatur">
+            <camunda:value id="reparatur" name="Reparatur" />
+            <camunda:value id="austausch" name="Austausch" />
+          </camunda:formField>
+          <camunda:formField id="rechnungspreis" label="Rechnungspreis" type="long" />
+          <camunda:formField id="plz" label="PLZ" type="long" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0sbu6ba</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0sbu6ba" sourceRef="StartEvent_1" targetRef="Daten_sammeln" />
+    <bpmn:sequenceFlow id="SequenceFlow_1xpetew" sourceRef="Daten_sammeln" targetRef="Rechnung_sichten" />
+    <bpmn:userTask id="Rechnung_sichten" name="Rechnung sichten" camunda:assignee="demo" camunda:candidateUsers="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="marke" label="Marke" type="string" />
+          <camunda:formField id="reparatur_art" label="Reparatur Art" type="enum">
+            <camunda:value id="reparatur" name="Reparatur" />
+            <camunda:value id="austausch" name="Austausch" />
+          </camunda:formField>
+          <camunda:formField id="rechnungspreis" label="Rechnungspreis" type="long" />
+          <camunda:formField id="pruefung_notwendig" label="Externe Prüfung notwendig?" type="boolean" defaultValue="false" />
+          <camunda:formField id="plz" label="PLZ" type="long" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1xpetew</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0fs3gvr</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Ext_pruefung_noetig" name="externe Prüfung notwendig?">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0fs3gvr</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1crvvct</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_07vvhkg</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0fs3gvr" sourceRef="Rechnung_sichten" targetRef="Ext_pruefung_noetig" />
+    <bpmn:sequenceFlow id="SequenceFlow_1crvvct" name="ja" sourceRef="Ext_pruefung_noetig" targetRef="Ext_pruefung">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pruefung_notwendig == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1mz8m3r">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_07vvhkg</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1u4d032</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0hjepw8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_07vvhkg" name="nein" sourceRef="Ext_pruefung_noetig" targetRef="ExclusiveGateway_1mz8m3r">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pruefung_notwendig == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1u4d032" name="ja" sourceRef="Rechnung_ok" targetRef="ExclusiveGateway_1mz8m3r">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${rechnung_ok == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0hjepw8" name="nein" sourceRef="ExclusiveGateway_1mz8m3r" targetRef="Rechnung_freigeben" />
+    <bpmn:exclusiveGateway id="Rechnung_ok" name="Rechnung ok?">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0ktuhrr</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1u4d032</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1sim23i</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0ktuhrr" sourceRef="Ext_pruefung" targetRef="Rechnung_ok" />
+    <bpmn:sequenceFlow id="SequenceFlow_1sim23i" name="nein" sourceRef="Rechnung_ok" targetRef="Rechnung_ablehnen">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${rechnung_ok == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Rechnung_freigegeben" name="Rechnung freigegeben">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_04jj40z</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_04jj40z" sourceRef="Rechnung_freigeben" targetRef="Rechnung_freigegeben" />
+    <bpmn:endEvent id="Rechnung_abgelehnt" name="Rechnung abgelehnt">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1b611zb</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1b611zb" sourceRef="Rechnung_ablehnen" targetRef="Rechnung_abgelehnt" />
+    <bpmn:userTask id="Ext_pruefung" name="Externe Prüfung durchführen" camunda:assignee="demo" camunda:candidateUsers="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="marke" label="Marke" type="string" />
+          <camunda:formField id="reparatur_art" label="Reparatur Art" type="enum">
+            <camunda:value id="reparatur" name="Reparatur" />
+            <camunda:value id="austausch" name="Austausch" />
+          </camunda:formField>
+          <camunda:formField id="rechnungspreis" label="Rechnungspreis" type="long" />
+          <camunda:formField id="rechnung_ok" label="Rechnung ok?" type="boolean" defaultValue="true" />
+          <camunda:formField id="plz" label="PLZ" type="long" />
+        </camunda:formData>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1crvvct</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0ktuhrr</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Daten_sammeln" name="Daten zum Versicherten sammeln" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)
+execution.setVariable("vollkasko", true)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0sbu6ba</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1xpetew</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Rechnung_freigeben" name="Rechnung freigeben" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0hjepw8</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_04jj40z</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Rechnung_ablehnen" name="Rechnung ablehnen" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">sleep(2000)</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1sim23i</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1b611zb</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Demoprozess">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="156" y="145" width="72" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0sbu6ba_di" bpmnElement="SequenceFlow_0sbu6ba">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="259" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1xpetew_di" bpmnElement="SequenceFlow_1xpetew">
+        <di:waypoint x="359" y="120" />
+        <di:waypoint x="409" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0nxotcm_di" bpmnElement="Rechnung_sichten">
+        <dc:Bounds x="409" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0md9jnw_di" bpmnElement="Ext_pruefung_noetig" isMarkerVisible="true" bioc:stroke="#000" bioc:fill="#fff">
+        <dc:Bounds x="559" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="545" y="65" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0fs3gvr_di" bpmnElement="SequenceFlow_0fs3gvr">
+        <di:waypoint x="509" y="120" />
+        <di:waypoint x="559" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1crvvct_di" bpmnElement="SequenceFlow_1crvvct" bioc:stroke="#000" bioc:fill="#fff">
+        <di:waypoint x="584" y="145" />
+        <di:waypoint x="584" y="224" />
+        <di:waypoint x="677" y="224" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="595" y="183" width="9" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1mz8m3r_di" bpmnElement="ExclusiveGateway_1mz8m3r" isMarkerVisible="true">
+        <dc:Bounds x="851" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_07vvhkg_di" bpmnElement="SequenceFlow_07vvhkg" bioc:stroke="#000" bioc:fill="#fff">
+        <di:waypoint x="609" y="120" />
+        <di:waypoint x="851" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="720" y="102" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1u4d032_di" bpmnElement="SequenceFlow_1u4d032">
+        <di:waypoint x="876" y="199" />
+        <di:waypoint x="876" y="145" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="887" y="169" width="9" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0hjepw8_di" bpmnElement="SequenceFlow_0hjepw8">
+        <di:waypoint x="901" y="120" />
+        <di:waypoint x="975" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="928" y="102" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0qwxdiz_di" bpmnElement="Rechnung_ok" isMarkerVisible="true">
+        <dc:Bounds x="851" y="199" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="841" y="256" width="71" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ktuhrr_di" bpmnElement="SequenceFlow_0ktuhrr">
+        <di:waypoint x="777" y="224" />
+        <di:waypoint x="851" y="224" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1sim23i_di" bpmnElement="SequenceFlow_1sim23i">
+        <di:waypoint x="901" y="224" />
+        <di:waypoint x="975" y="224" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="928" y="206" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_0a8yx21_di" bpmnElement="Rechnung_freigegeben" bioc:stroke="#000" bioc:fill="#fff">
+        <dc:Bounds x="1148" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1137" y="145" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_04jj40z_di" bpmnElement="SequenceFlow_04jj40z">
+        <di:waypoint x="1075" y="120" />
+        <di:waypoint x="1148" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_07wg2s8_di" bpmnElement="Rechnung_abgelehnt" bioc:stroke="#000" bioc:fill="#fff">
+        <dc:Bounds x="1149" y="206" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1142" y="249" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1b611zb_di" bpmnElement="SequenceFlow_1b611zb">
+        <di:waypoint x="1075" y="224" />
+        <di:waypoint x="1149" y="224" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_098meol_di" bpmnElement="Ext_pruefung">
+        <dc:Bounds x="677" y="184" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1q9dn5l_di" bpmnElement="Daten_sammeln">
+        <dc:Bounds x="259" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_13ptx9w_di" bpmnElement="Rechnung_freigeben">
+        <dc:Bounds x="975" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0403iuk_di" bpmnElement="Rechnung_ablehnen">
+        <dc:Bounds x="975" y="184" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

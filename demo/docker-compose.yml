@@ -1,0 +1,77 @@
+version: '3.5'
+services:
+  camunda:
+    build: ./camunda
+    environment:
+      DB_DRIVER: org.h2.Driver
+      DB_URL: jdbc:h2:/app/db/database;DB_CLOSE_DELAY=-1;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE
+      DB_USERNAME: sa
+      DB_PASSWORD: sa
+      SKIP_DB_CONFIG: "true"
+    volumes:
+      - type: bind
+        source: ./camunda/data
+        target: /camunda/camunda-h2-dbs
+    ports:
+      - "127.0.0.1:7777:8080"
+    expose:
+      - 8080
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    expose: 
+      - 2181
+  kafka:
+    image: wurstmeister/kafka:2.12-2.3.0
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,EXTERNAL://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9093
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    expose:
+      - 9092
+    ports:
+      - "127.0.0.1:9093:9093"
+    links:
+      - "zookeeper:zookeeper"
+    depends_on:
+      - zookeeper
+  pollingclient:
+    image: viadee/camunda-kafka-polling-client:1.2.0
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_PROFILES_ACTIVE: rest
+      CAMUNDA_REST_URL: http://camunda:8080/engine-rest/
+      POLLING_RUNTIME_DATA_INITIAL_TIMESTAMP: "2019-11-01 00:00:00"
+      POLLING_REPOSITORY_DATA_INITIAL_TIMESTAMP: "2019-11-01 00:00:00"
+    links:
+      - "kafka:kafka"
+      - "camunda:camunda"
+    volumes:
+      - type: bind
+        source: ./polling-client/data
+        target: /data
+    depends_on:
+      - kafka
+      - camunda
+  bpmnai:
+    image: viadee/bpmn.ai-ui:latest
+    environment:
+      WORKING_DIRECTORY: /data/wd
+      LOG_DIRECTORY: /data/ld
+      FILE_DESTINATION: /data/output
+    volumes:
+      - type: bind
+        source: ./bpmnai/data
+        target: /data
+    links:
+      - "kafka:kafka"
+    expose:
+      - 7000
+      - 4040
+    ports:
+      - "127.0.0.1:7000:7000"
+      - "127.0.0.1:4040:4040"
+networks:
+  default:
+    name: bpmnai-ui-demo
