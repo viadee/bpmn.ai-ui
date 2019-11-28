@@ -42,3 +42,5 @@ For more information on configuration options you can check the [github reposito
 
 ## bpmn.ai UI web application
 The UI bpmn.ai web application is exposed on port 7000 on the host machine and can therefore be accessed by going to [http://localhost:7000](http://localhost:7000). The Spark UI is exposed on port 4040 on the host machine.
+
+A video introducing bpmn.ai and showing how to use the UI can be accessed on [Youtube](https://www.youtube.com/watch?v=qvtbqt4BOvo).
