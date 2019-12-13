@@ -233,17 +233,6 @@ public class BpmnAIService {
 
             resultPreviewResponse.setData(data.toArray());
             resultPreviewResponse.setHeader(dataset.columns());
-
-            //get activity information
-            dataset = sparkSession.sql("select activity_name_, MAX(activity_id_) as activity_id_ from " + BpmnaiVariables.RESULT_PREVIEW_TEMP_TABLE + " group by activity_name_");
-            results = dataset.toJSON().collectAsList();
-
-            List<Object> activities = new ArrayList<>();
-
-            for(String result : results) {
-                activities.add(jsonParser.parse(result));
-            }
-            resultPreviewResponse.setActivities(activities.toArray());
         }
 
         return resultPreviewResponse;
