@@ -30,7 +30,7 @@
     "angular-chart.js": "^1.1.1",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "npm": "^6.8.0",
     "rxjs": "^6.5.1",
     "zone.js": "^0.8.26"
